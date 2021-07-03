@@ -1,21 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+
+import { Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/inter';
+import { Rajdhani_500Medium, Rajdhani_700Bold } from '@expo-google-fonts/rajdhani';
+
+import { StatusBar, LogBox } from 'react-native';
+import { Routes } from './src/routes';
+import { Background } from './src/components/Background';
+import { AuthProvider } from './src/hooks/auth';
+
+LogBox.ignoreLogs(['You are not currently signed in to Expo on your development machine.'])
 
 export default function App() {
+
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Rajdhani_500Medium,
+    Rajdhani_700Bold
+  });
+
+  if(!fontsLoaded){
+    return <AppLoading />
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Background>
+      <StatusBar 
+        barStyle='light-content' 
+        backgroundColor='transparent' 
+        translucent
+      />
+      <AuthProvider >
+        <Routes />
+      </AuthProvider>
+    </Background>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
